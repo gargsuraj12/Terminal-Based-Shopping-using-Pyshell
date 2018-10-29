@@ -5,7 +5,8 @@ import product
 
 class Cart:
 
-    def __init__(self):
+    def __init__(self,id):
+        self.id = id
         self.numOfProducts = 0
         self.prodList = []
         self.cartTotal = 0

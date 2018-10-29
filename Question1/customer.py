@@ -27,12 +27,18 @@ class Customer:
         self.cName = name
         self.cAddress = address
         self.phone = phone
-
+        self.cart = cart.Cart(id)
 
 class CustomerTasks:
 
-    def __init__(self):
-        self.cart = cart.Cart()
+    def __init__(self,cart):
+        self.cart = cart
+        if self.cart.numOfProducts > 0:
+            for product in self.cart.prodList:
+                if searchProduct(product.pName) == None:
+                    self.cart.removeProductFromCart(product)
+                else:
+                    continue    
 
     def addToCart(self):
         name = input("Enter the name of the product: ")
@@ -41,6 +47,7 @@ class CustomerTasks:
             print("product with the entered name does not exist..")
             return
         self.cart.addProdToCart(product)
+        print("Product successfully added in the cart..")
 
     def viewCart(self):
         if self.cart.numOfProducts == 0:

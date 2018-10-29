@@ -16,16 +16,16 @@ def viewProducts():
 
 
 def getRegistered():
-    userid = input("Enter the userid: ")
+    userid = input("Enter the username: ")
     password = input("Enter the password: ")
     name = input("Enter your full name: ")
     address = input("Enter your full address: ")
     phone = input("Enter phone number: ")
     for cust in dataLists.custList:
-        if cust.userid == userid:
+        if cust.userId == userid:
             print(
                 "Another user with same userid is present in the system!! Please choose a different userid")
-            return False
+            return None
     newCust = customer.Customer(userid, password, name, address, phone)
     dataLists.custList.append(newCust)
-    return True
+    return newCust
