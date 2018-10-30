@@ -1,7 +1,7 @@
 ter using Python: Select Interpreter, that interpreter is applied when right-clicking a 
 file and selecting Python: Run Python File in Terminal. 
 You can also use Terminal: Create New Integrated Terminal or Python:
- Create Terminal to open a terminal in which that environment is activated. 
+ Create Term:inal to open a terminal in which that environment is activated. 
  (The python.terminal.activateEnvironment setting, set to true by default,
   controls automatic activation.)
 
