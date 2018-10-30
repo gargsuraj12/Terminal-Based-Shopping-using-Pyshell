@@ -22,11 +22,24 @@ def searchProduct(prodId):
             return True
     return False
 
+def searchOrder(orderId):
+    for order in dataLists.orderList:
+        if order.orderId == orderId:
+            return order
+    return None
 
 def addProduct():
-    id = int(input("Enter the product id: "))
+    try:
+        id = int(input("Enter the product id: "))
+    except ValueError:
+        print("Id must be in number format..")    
+        return
     name = input("Enter the product name: ")
-    price = int(input("Enter the product price: "))
+    try:
+        price = int(input("Enter the product price: "))
+    except ValueError:
+        print("Price must be in number format..")
+        return    
     group = input("Enter the product's group: ")
     subgroup = input("Enter the product's subgroup: ")
     if searchProduct(id) == True:
@@ -52,8 +65,11 @@ def deleteProduct():
     if len(dataLists.prodList) == 0:
         print("Currently no products in the system to delete!!")
         return
-
-    id = int(input("Enter the product id to be deleted: "))
+    try:
+        id = int(input("Enter the product id to be deleted: "))
+    except ValueError:
+        print("Id must be in number format..")    
+        return
     if searchProduct(id) == False:
         print("No product is present with the entered id..")
         return
@@ -68,21 +84,33 @@ def modifyProduct():
     if len(dataLists.prodList) == 0:
         print("Currently no products in the system to delete!!")
         return
-    id = int(input("Enter the product id to be modified: "))
+    try:    
+        id = int(input("Enter the product id to be modified: "))
+    except:
+        print("Id must be a number..")
+        return    
     if searchProduct(id) == False:
         print("No product is present with the entered id..")
         return
     for product in dataLists.prodList:
         if id == product.pId:
-            dataLists.prodList.remove(product)
             printUpdateMenu()
-            choice = int(input("Enter your choice: "))
+            try:
+                choice = int(input("Enter your choice: "))
+            except ValueError:
+                print("Choice must be in number format")
+                return    
+            dataLists.prodList.remove(product)       
             if choice == 1:
                 name = input("Enter product's new name: ")
                 product.setProdName(name)
             elif choice == 2:
-                price = int(input("Enter product's new price: "))
-                product.setProdPrice(price)
+                try:
+                    price = int(input("Enter product's new price: "))
+                    product.setProdPrice(price)
+                except ValueError:
+                    print("Price must be in number format..")
+                    return    
             elif choice == 3:
                 group = input("Enter product's new group: ")
                 product.setProdGroup(group)
@@ -94,14 +122,70 @@ def modifyProduct():
             dataLists.prodList.append(product)
             break
 
+def viewAllOrders():
+    if len(dataLists.orderList) == 0:
+            print("Anybody haven't ordered anything yet..")
+            return
+    for order in dataLists.orderList:
+        print("Order Id: ", order.orderId)
+        print("Order Placed by:", order.userId)
+        for product in order.prodList:
+            print(product.pName,"\t", product.price)
+        print("Total order amount: ", order.orderAmount)
+        print("Payment made via Card num: ", order.cardNum)
+        print("Delivery Address: ", order.deliveryAddress)
+        print("Status of the order: ", order.status)
+        print("Expected delivery date: ", order.expectedDeliveryDate)
+        print("----------------------------------------------------------------------------------------")    
+        
 
 def makeShipment():
-    pass
+    if len(dataLists.orderList) == 0:
+        print("No customer has placed any order till now..")
+        return
+    try:    
+        orderId = int(input("Enter the order id to ship: "))
+    except ValueError:
+        print("Order id must be in number format..")
+        return    
+    order = searchOrder(orderId)
+    if order == None:
+        print("Nobody has placed order with entered order id...")
+        return
+    if order.status == dataLists.ORDER_SHIPPED:
+        print("This order has already been shipped..")
+        return
+    if order.status == dataLists.ORDER_PENDING:
+        print("This order is pending for confirmation. Please confirm it first")
+        return    
+    dataLists.orderList.remove(order)    
+    order.status = dataLists.ORDER_SHIPPED
+    dataLists.orderList.append(order)
+    print("Order has been shipped successfully...")    
+
 
 
 def confirmDelivery():
-    pass
-
+    if len(dataLists.orderList) == 0:
+        print("No customer has placed any order till now..")
+        return
+    try:    
+        orderId = int(input("Enter the order id to ship: "))
+    except ValueError:
+        print("Order id must be in number format..")
+        return
+    order = searchOrder(orderId)
+    if order == None:
+        print("Nobody has placed order with entered order id...")
+        return
+    if order.status != dataLists.ORDER_PENDING:
+        print("This order has already been processed..")
+        return
+    dataLists.orderList.remove(order)
+    deliveryDate = input("Enter the expected delivery date for this order: ")
+    order.expectedDeliveryDate = deliveryDate
+    order.status = dataLists.ORDER_CONFIRMED
+    dataLists.orderList.append(order)
 
 def viewAllCustomers():
     if len(dataLists.custList) == 0:

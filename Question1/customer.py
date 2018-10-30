@@ -3,6 +3,7 @@
 import product
 import dataLists
 import cart
+import orders
 
 
 def searchProduct(name):
@@ -28,40 +29,44 @@ class Customer:
         self.cAddress = address
         self.phone = phone
         self.cart = cart.Cart(id)
+        self.orderList = []
 
 class CustomerTasks:
 
-    def __init__(self,cart):
-        self.cart = cart
-        if self.cart.numOfProducts > 0:
-            for product in self.cart.prodList:
+    def __init__(self, customer: Customer):
+        if customer.cart.numOfProducts > 0:
+            for product in customer.cart.prodList:
                 if searchProduct(product.pName) == None:
-                    self.cart.removeProductFromCart(product)
+                    customer.cart.removeProductFromCart(product)
                 else:
-                    continue    
+                    continue
+        customer.orderList.clear()
+        for order in dataLists.orderList:
+            if order.userId == customer.userId:
+                customer.orderList.append(order)            
 
-    def addToCart(self):
+    def addToCart(self, customer: Customer):
         name = input("Enter the name of the product: ")
         product = searchProduct(name)
         if product == None:
             print("product with the entered name does not exist..")
             return
-        self.cart.addProdToCart(product)
+        customer.cart.addProdToCart(product)
         print("Product successfully added in the cart..")
 
-    def viewCart(self):
-        if self.cart.numOfProducts == 0:
+    def viewCart(self, customer: Customer):
+        if customer.cart.numOfProducts == 0:
             print("Your cart is empty!! Please add some products first..")
             return
         print("Name\t\tPrice\t\tGroup\t\tSubgroup")
-        for product in self.cart.prodList:
+        for product in customer.cart.prodList:
             print(product.pName, "\t\t", product.price,
                   "\t\t", product.pGroup, "\t\t", product.pSubgroup)
-        print("Items in cart: ", self.cart.numOfProducts)
-        print("Cart total: ", self.cart.cartTotal)
+        print("Items in cart: ", customer.cart.numOfProducts)
+        print("Cart total: ", customer.cart.cartTotal)
 
-    def deleteFromCart(self):
-        if self.cart.numOfProducts == 0:
+    def deleteFromCart(self, customer: Customer):
+        if customer.cart.numOfProducts == 0:
             print("Cart contains no products to be deleted..")
             return
         name = input("Enter the product name to be deleted: ")
@@ -69,15 +74,71 @@ class CustomerTasks:
         if product == None:
             print("Cart does not contain any item with the entered name!!")
             return
-        self.cart.removeProductFromCart(product)
+        customer.cart.removeProductFromCart(product)
         print("Product deleted successfully..")
 
-    def buyProducts(self):
-        if self.cart.numOfProducts == 0:
-            print("Cart is currently empty!! Please add some products to cart..")
+    def viewOrders(self, customer: Customer):
+        if len(customer.orderList) == 0:
+            print("You haven't ordered anything yet..")
             return
-        # write the info into the log and empty the cart and redirect to make payment
-        pass
+        print("-----------------------------------------------------------------------")    
+        for order in customer.orderList:
+            for product in order.prodList:
+                print(product.pName,"\t", product.price)
+            print("Total order amount: ", order.orderAmount)
+            print("Payment made via Card num: ", order.cardNum)
+            print("Delivery Address: ", order.deliveryAddress)
+            print("Status of the order: ", order.status)
+            if order.expectedDeliveryDate == "":
+                print("Expected delivery date: Not-Confirmed")
+            else:    
+                print("Expected delivery date: ", order.expectedDeliveryDate)
+            print("-----------------------------------------------------------------------")    
+            
 
-    def makePayment(self):
-        pass
+    def buyProducts(self, customer: Customer):
+        # name = input("Enter the name of the product: ")
+        # product = searchProduct(name)
+        # if product == None:
+        #     print("Product with the entered name does not exist..")
+        #     return
+        # self.cart.addProdToCart(product)
+        self.addToCart(customer)    
+        print("Press 1 to Make Payment")
+        print("Press any key to Continue Shopping")
+        choice = None
+        try:
+            choice = int(input("Enter your choice: "))
+        except ValueError:
+            print("Choice must be in number format..")
+            return
+        if choice == 1:
+            self.makePayment(customer)
+        else:
+            return
+
+
+    def makePayment(self, customer: Customer):
+        if customer.cart.numOfProducts == 0:
+            print("Cart is Empty!! Please first add some products in cart to make payment..")
+            return
+        try:
+            cardNum = int(input("Enter card number: "))
+        except ValueError:
+            print("Card number must be an integer")
+            return
+        deliveryAddress = input("Enter Delivery address: ")        
+        orderAmount = customer.cart.cartTotal
+        prodList = []
+        for product in customer.cart.prodList:
+              prodList.append(product)
+            #   customer.cart.removeProductFromCart(product)
+        order = orders.Order(customer.userId, prodList, orderAmount, cardNum, deliveryAddress)
+        customer.orderList.append(order)
+        dataLists.orderList.append(order)
+        customer.cart.prodList.clear()
+        customer.cart.cartTotal = 0
+        customer.cart.numOfProducts = 0
+        print("Payment Completed. Your order is placed..")
+        print("You can now check the status of the order..")
+        

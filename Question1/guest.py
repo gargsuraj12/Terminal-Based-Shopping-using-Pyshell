@@ -1,5 +1,7 @@
 #!/usr/bin/python3
 
+import getpass
+
 import product
 import dataLists
 import customer
@@ -17,7 +19,7 @@ def viewProducts():
 
 def getRegistered():
     userid = input("Enter the username: ")
-    password = input("Enter the password: ")
+    password = getpass.getpass("Enter the password: ")
     name = input("Enter your full name: ")
     address = input("Enter your full address: ")
     phone = input("Enter phone number: ")

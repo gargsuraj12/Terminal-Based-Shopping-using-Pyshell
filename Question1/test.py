@@ -1,4 +1,8 @@
-l = [1, 'hi', "hello", 2.45565]
-print(l)
-l.remove('hi')
-print(l)
+import getpass
+
+choice = None
+try:
+    choice = int(input("Enter a num:"))
+except ValueError:
+    print("Enter in number format")    
+print (choice)
