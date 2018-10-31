@@ -17,7 +17,7 @@ def loginMenu():
 
 
 def adminMenu():
-    print("-----------------------------------------------")
+    print("----------------------------------------------------------------------------------------------------------------")
     print("1. View Products")
     print("2. Add Product")
     print("3. Delete Product")
@@ -27,11 +27,11 @@ def adminMenu():
     print("7. View all registerd customers")
     print("8. View all orders")
     print("9. Logout")
-    print("-----------------------------------------------")
+    print("----------------------------------------------------------------------------------------------------------------")
     
 
 def customerMenu():
-    print("-----------------------------------------------")
+    print("----------------------------------------------------------------------------------------------------------------")
     print("1. View Products")
     print("2. Add a product to cart")
     print("3. View Cart")
@@ -40,15 +40,15 @@ def customerMenu():
     print("6. Make Payment")
     print("7. View orders")
     print("8. Logout")
-    print("-----------------------------------------------")
+    print("----------------------------------------------------------------------------------------------------------------")
     
 
 def guestMenu():
-    print("-----------------------------------------------")
+    print("----------------------------------------------------------------------------------------------------------------")
     print("1. View Products")
     print("2. Get Registered")
-    print("3. Exit")
-    print("-----------------------------------------------")
+    print("3. Exit from Guest Role")
+    print("----------------------------------------------------------------------------------------------------------------")
     
 
 def validateAdmin():
@@ -70,7 +70,7 @@ def validateCustomer():
 
 def executeAdmin():
     print("\033[H\033[J")
-    print("-----------Welcome to admin home----------")
+    print("----------- Welcome to admin home ----------")
     while True:
         adminMenu()
         try:
@@ -88,10 +88,8 @@ def executeAdmin():
             admin.modifyProduct()
         elif choice == 5:
             admin.makeShipment()
-            # print("This functionality has not been implemented yet..")
         elif choice == 6:
             admin.confirmDelivery()
-            # print("This functionality has not been implemented yet..")
         elif choice == 7:
             admin.viewAllCustomers()
         elif choice == 8:
@@ -107,7 +105,7 @@ def executeAdmin():
 
 def executeCustomer(cust: customer.Customer):
     print("\033[H\033[J")
-    print("-----------Welcome ", cust.cName," ----------")
+    print("----------- Welcome ", cust.cName," ----------")
     custObj = customer.CustomerTasks(cust)
     while True:
         customerMenu()
@@ -144,7 +142,7 @@ def executeCustomer(cust: customer.Customer):
 
 def executeGuest():
     print("\033[H\033[J")
-    print("-----------Welcome to guest home----------")
+    print("----------- Welcome to guest home ----------")
     while True:
         guestMenu()
         try:
@@ -205,7 +203,7 @@ customerFile.close()
 ordersFile.close()
 
 while True:
-    print("---------Welcome to login menu------------")
+    print("--------- Welcome to login menu ------------")
     loginMenu()
     try:
         choice = int(input("Enter your choice: "))

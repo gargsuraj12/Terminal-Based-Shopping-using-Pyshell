@@ -136,7 +136,7 @@ def viewAllOrders():
         print("Delivery Address: ", order.deliveryAddress)
         print("Status of the order: ", order.status)
         print("Expected delivery date: ", order.expectedDeliveryDate)
-        print("----------------------------------------------------------------------------------------")    
+        print("----------------------------------------------------------------------------------------------------------------")    
         
 
 def makeShipment():

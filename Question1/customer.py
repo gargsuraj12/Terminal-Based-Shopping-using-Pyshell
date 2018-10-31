@@ -81,7 +81,7 @@ class CustomerTasks:
         if len(customer.orderList) == 0:
             print("You haven't ordered anything yet..")
             return
-        print("-----------------------------------------------------------------------")    
+        print("----------------------------------------------------------------------------------------------------------------")   
         for order in customer.orderList:
             for product in order.prodList:
                 print(product.pName,"\t", product.price)
@@ -93,26 +93,15 @@ class CustomerTasks:
                 print("Expected delivery date: Not-Confirmed")
             else:    
                 print("Expected delivery date: ", order.expectedDeliveryDate)
-            print("-----------------------------------------------------------------------")    
-            
+            print("----------------------------------------------------------------------------------------------------------------")
+
 
     def buyProducts(self, customer: Customer):
-        # name = input("Enter the name of the product: ")
-        # product = searchProduct(name)
-        # if product == None:
-        #     print("Product with the entered name does not exist..")
-        #     return
-        # self.cart.addProdToCart(product)
         self.addToCart(customer)    
         print("Press 1 to Make Payment")
         print("Press any key to Continue Shopping")
-        choice = None
-        try:
-            choice = int(input("Enter your choice: "))
-        except ValueError:
-            print("Choice must be in number format..")
-            return
-        if choice == 1:
+        choice = input("Enter your choice: ")
+        if choice == 1 or choice == '1':
             self.makePayment(customer)
         else:
             return
