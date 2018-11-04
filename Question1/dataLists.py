@@ -13,6 +13,9 @@ custList = []
 global orderList
 orderList = []  #list(orders.OrderDetails)
 
+global totalOrders
+totalOrders = 1
+
 global ORDER_PENDING
 ORDER_PENDING = "Pending for confirmation"
 

@@ -19,10 +19,20 @@ def viewProducts():
 
 def getRegistered():
     userid = input("Enter the username: ")
+    if userid == None or userid == '':
+        print("Username cannot be empty!!")
+        return
     password = getpass.getpass("Enter the password: ")
+    if password == None or password == '':
+        print("Password cannot be empty!!")
+        return 
     name = input("Enter your full name: ")
+    if name == None or name == '':
+        print("Name cannot be empty!!")
+        return 
     address = input("Enter your full address: ")
     phone = input("Enter phone number: ")
+    
     for cust in dataLists.custList:
         if cust.userId == userid:
             print(

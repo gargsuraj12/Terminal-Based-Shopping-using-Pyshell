@@ -1,8 +1,11 @@
 #!/usr/bin/python3
 
-import product
+from product import Product
 import dataLists
-
+from customer import Customer
+from dataLists import ORDER_CONFIRMED, ORDER_DELIVERED, ORDER_PENDING, ORDER_SHIPPED 
+import matplotlib.pyplot as graph
+# from tkinter import *
 
 id = 7
 uname = "suraj"
@@ -22,6 +25,12 @@ def searchProduct(prodId):
             return True
     return False
 
+def searchProductByName(pName):
+    for product in dataLists.prodList:
+        if product.pName == pName:
+            return True
+    return False
+
 def searchOrder(orderId):
     for order in dataLists.orderList:
         if order.orderId == orderId:
@@ -34,7 +43,13 @@ def addProduct():
     except ValueError:
         print("Id must be in number format..")    
         return
+    if searchProduct(id) == True:
+        print("Product with the entered id cannot be added as another product with same id is present in the system")
+        return    
     name = input("Enter the product name: ")
+    if searchProductByName(name) == True:
+        print("Product with the entered name cannot be added as another product with same name is present in the system")
+        return
     try:
         price = int(input("Enter the product price: "))
     except ValueError:
@@ -42,10 +57,7 @@ def addProduct():
         return    
     group = input("Enter the product's group: ")
     subgroup = input("Enter the product's subgroup: ")
-    if searchProduct(id) == True:
-        print("Product with the entered id cannot be added as another product with same id is present in the system")
-        return
-    newprod = product.Product(id, name, price, group, subgroup)
+    newprod = Product(id, name, price, group, subgroup)
     dataLists.prodList.append(newprod)
     print("Product successfully added..")
 
@@ -152,17 +164,16 @@ def makeShipment():
     if order == None:
         print("Nobody has placed order with entered order id...")
         return
-    if order.status == dataLists.ORDER_SHIPPED:
+    if order.status == ORDER_SHIPPED:
         print("This order has already been shipped..")
         return
-    if order.status == dataLists.ORDER_PENDING:
+    if order.status == ORDER_PENDING:
         print("This order is pending for confirmation. Please confirm it first")
         return    
     dataLists.orderList.remove(order)    
-    order.status = dataLists.ORDER_SHIPPED
+    order.status = ORDER_SHIPPED
     dataLists.orderList.append(order)
     print("Order has been shipped successfully...")    
-
 
 
 def confirmDelivery():
@@ -170,7 +181,7 @@ def confirmDelivery():
         print("No customer has placed any order till now..")
         return
     try:    
-        orderId = int(input("Enter the order id to ship: "))
+        orderId = int(input("Enter the order id to Confirm: "))
     except ValueError:
         print("Order id must be in number format..")
         return
@@ -178,13 +189,13 @@ def confirmDelivery():
     if order == None:
         print("Nobody has placed order with entered order id...")
         return
-    if order.status != dataLists.ORDER_PENDING:
+    if order.status != ORDER_PENDING:
         print("This order has already been processed..")
         return
     dataLists.orderList.remove(order)
     deliveryDate = input("Enter the expected delivery date for this order: ")
     order.expectedDeliveryDate = deliveryDate
-    order.status = dataLists.ORDER_CONFIRMED
+    order.status = ORDER_CONFIRMED
     dataLists.orderList.append(order)
 
 def viewAllCustomers():
@@ -196,3 +207,36 @@ def viewAllCustomers():
         print(cust.userId, "\t\t", cust.password, "\t\t",
               cust.cName, "\t\t", cust.phone)
     return
+
+def plotPurchaseHistory():
+    if not dataLists.orderList:
+        print("No users have purchased anything yet..")
+        return
+    custIdList = []
+    purchasedAmtList = []
+    
+    for cust in dataLists.custList:
+        custIdList.append(cust.userId)
+        purchasedAmtList.append(cust.totalPurchasedAmt)
+
+    graph.bar(custIdList, purchasedAmtList, width = 0.8, color = ['blue', 'green'])
+    graph.ylabel("Purchased Amount")
+    graph.xlabel("Users")
+    graph.title("Users and Purchase History")
+    graph.show()
+
+def plotProductsBought():
+    if not dataLists.orderList:
+        print("No users have bought any product yet..")
+        return
+    custIdList = []
+    prodBoughtList = []
+    for cust in dataLists.custList:
+        custIdList.append(cust.userId)
+        prodBoughtList.append(cust.productsBought)
+
+    graph.bar(custIdList, prodBoughtList, width=0.8, color=['blue', 'green'])
+    graph.ylabel("Products Purchased")
+    graph.xlabel("Users")
+    graph.title("Users and Products Bought History")
+    graph.show()    

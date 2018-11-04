@@ -26,7 +26,9 @@ def adminMenu():
     print("6. Confirm Delivery")
     print("7. View all registerd customers")
     print("8. View all orders")
-    print("9. Logout")
+    print("9. Plot Users and Purchase History")
+    print("10. Plot Users and Products Bought")
+    print("11. Logout")
     print("----------------------------------------------------------------------------------------------------------------")
     
 
@@ -95,6 +97,10 @@ def executeAdmin():
         elif choice == 8:
             admin.viewAllOrders()    
         elif choice == 9:
+            admin.plotPurchaseHistory()
+        elif choice == 10:
+            admin.plotProductsBought()
+        elif choice == 11:
             print("\033[H\033[J")
             print("Successfully logged out..")
             break

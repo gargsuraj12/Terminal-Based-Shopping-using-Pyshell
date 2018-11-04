@@ -1,9 +1,9 @@
 #!/usr/bin/python3
 
-import product
+from product import Product
 import dataLists
-import cart
-import orders
+from cart import Cart
+from orders import Order
 
 
 def searchProduct(name):
@@ -28,8 +28,10 @@ class Customer:
         self.cName = name
         self.cAddress = address
         self.phone = phone
-        self.cart = cart.Cart(id)
+        self.cart = Cart(id)
         self.orderList = []
+        self.totalPurchasedAmt = 0
+        self.productsBought = 0
 
 class CustomerTasks:
 
@@ -122,10 +124,12 @@ class CustomerTasks:
         for product in customer.cart.prodList:
               prodList.append(product)
             #   customer.cart.removeProductFromCart(product)
-        order = orders.Order(customer.userId, prodList, orderAmount, cardNum, deliveryAddress)
+        order = Order(customer.userId, prodList, orderAmount, cardNum, deliveryAddress)
         customer.orderList.append(order)
         dataLists.orderList.append(order)
         customer.cart.prodList.clear()
+        customer.totalPurchasedAmt += customer.cart.cartTotal
+        customer.productsBought += customer.cart.numOfProducts
         customer.cart.cartTotal = 0
         customer.cart.numOfProducts = 0
         print("Payment Completed. Your order is placed..")

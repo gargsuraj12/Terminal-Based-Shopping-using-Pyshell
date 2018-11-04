@@ -6,10 +6,9 @@ import dataLists
 
 
 class Order:
-    totalOrders = int(1)
 
     def __init__(self, userId, prodList, orderAmount, cardNum, address):
-        self.orderId = Order.totalOrders
+        self.orderId = dataLists.totalOrders
         self.userId = userId
         self.prodList = prodList
         self.orderAmount = orderAmount
@@ -17,7 +16,7 @@ class Order:
         self.deliveryAddress = address
         self.status = dataLists.ORDER_PENDING
         self.expectedDeliveryDate = ""
-        Order.totalOrders += 1
+        dataLists.totalOrders += 1
 
     def updateOrderStatus(self, newStatus):
         self.status = newStatus
